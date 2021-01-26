@@ -1,0 +1,58 @@
+create database product_user;
+use product_user;
+create table product (
+	id bigint not null primary key auto_increment,
+    productname varchar(255),
+    categoryid bigint not null,
+    description varchar(255),
+    price bigint;
+    type varchar(255) not null,
+    speed bigint not null,
+    power bigint not null,
+    gear varchar(255),
+    linkimage text;
+);
+
+create table user (
+	id bigint not null primary key auto_increment,
+    username varchar(255),
+    password varchar(255),
+	roleid bigint not null,
+	address varchar(255) not null,
+	phone bigint not null
+);
+
+create table role (
+	id bigint not null primary key auto_increment,
+	code varchar(255) not null
+);
+
+create table category (
+	id bigint not null primary key auto_increment,
+    code varchar(255) not null
+);
+
+use product_user;
+create table bill (
+	id bigint not null primary key auto_increment,
+    customername varchar(255) not null,
+    productname varchar(255) not null,
+    productprice bigint not null,
+    customerid bigint not null,
+    productid bigint not null,
+    amount bigint not null,
+    timebuy timestamp
+);
+
+
+
+ALTER TABLE user ADD CONSTRAINT fk_user_role FOREIGN KEY (roleid) REFERENCES role(id);
+ALTER TABLE product ADD CONSTRAINT fk_product_category FOREIGN KEY (categoryid) REFERENCES category(id);
+alter table bill add constraint fk_bill_user foreign key(customerid) references user(id);
+alter table bill add constraint fk_bill_product foreign key(productid) references product(id);
+
+insert into role(code) values('ADMIN');
+insert into role(code) values('USER');
+
+insert into user(username,password, roleid) values('admin','123456',1);
+insert into user(username,password, roleid)  values('user','123456',2);
